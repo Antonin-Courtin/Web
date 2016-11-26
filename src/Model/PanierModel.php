@@ -25,25 +25,41 @@ class PanierModel
         return $queryBuilder->execute()->fetchAll();
     }
 
-    public function valideCommande($id){
+    public function valideCommande($prix,$id,$produit){
+        $requete="SHOW TABLE STATUS LIKE'commandes'";
+        $select = $this->db->query($requete);
+        $results = $select->fetchAll();
+        var_dump($results);
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder
             ->insert ('commandes')
             ->values([
-                'id' => '?',
-                'id_genre' => '?',
-                'duree' => '?',
-                'dateSortie' => '?',
-                'nomProducteur' => '?'
+                'id'=>'NULL',
+                'prix'=>'?',
+
+                'date_achat'=>'NULL',
+                'user_id'=> '?',
+                'etat_id'=> '1'
 
             ])
-            ->setParameter(0, $donnees['titre'])
-            ->setParameter(1, $donnees['genreFilm_id'])
-            ->setParameter(2, $donnees['duree'])
-            ->setParameter(3, $donnees['date'])
-            ->setParameter(4, $donnees['producteur'])
+            ->setParameter(0, $prix)
+            ->setParameter(1, $id)
         ;
-        return $queryBuilder->execute();
+
+        $queryBuilder->execute();
+        foreach($produit as $r){
+        $queryBuilder = new QueryBuilder($this->db);
+        $queryBuilder
+            ->update('paniers','p')
+            ->set('p.commande_id','?')
+            ->where('p.user_id=?')
+            ->andWhere('p.aquarium_id=?')
+            ->setParameter(0,$results[0]['Auto_increment'])
+            ->setParameter(1,$id)
+            ->setParameter(2,$r['aquarium_id']);
+        $queryBuilder->execute();
+    }
+    return null;
     }
 
     public function updatePanierUser($id,$id_user,$quantite){
