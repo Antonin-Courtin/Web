@@ -39,11 +39,12 @@ class PanierController implements ControllerProviderInterface
         }
     }
 
-    public function validerCommande($app){
+    public function validerCommande(Application $app){
         if(isset($_POST['total'])){
             $this->panierModel=new PanierModel($app);
             $produit=$this->panierModel->getPanierUser($app['session']->get('user_id'));
-            $this->panierModel->valideCommande($_POST['total']);
+            $this->panierModel->valideCommande($_POST['total'],$app['session']->get('user_id'),$produit);
+            return $app->redirect($app["url_generator"]->generate("panier.show"));
         }
 
     }
@@ -95,6 +96,7 @@ class PanierController implements ControllerProviderInterface
         $controllers->get('/show', 'App\Controller\PanierController::show')->bind('panier.show');
         $controllers->post('/add/{id}', 'App\Controller\PanierController::addPanier')->bind('panier.add');
         $controllers->get('/delete/{id}', 'App\Controller\PanierController::deleteArticlePanier')->bind('panier.deleteArticle');
+        $controllers->post('/valide', 'App\Controller\PanierController::validerCommande')->bind('panier.valide');
         return $controllers;
     }
 }
