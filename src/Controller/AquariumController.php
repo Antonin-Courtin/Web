@@ -177,7 +177,7 @@ class AquariumController implements ControllerProviderInterface
 
     public function connect(Application $app) {  //http://silex.sensiolabs.org/doc/providers.html#controller-providers
         $controllers = $app['controllers_factory'];
-
+        $controllers->get('/showCommandes','App\Controller\aquariumController::showCommandes')->bind('aquarium.showCommandes');
         $controllers->get('/', 'App\Controller\aquariumController::index')->bind('aquarium.index');
         $controllers->get('/show', 'App\Controller\aquariumController::show')->bind('aquarium.show');
 
