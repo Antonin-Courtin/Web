@@ -24,11 +24,18 @@ class AquariumController implements ControllerProviderInterface
         $this->aquariumModel = new AquariumModel($app);
         $this->typeAquariumModel = new TypeAquariumModel($app);
     }
+    
+  
 
     public function index(Application $app) {
         return $this->show($app);
     }
 
+    public function showCommande(Application $app){
+        $this->aquariumModel=new AquariumModel($app);
+        $commandes =$this->aquariumModel->getAllCommandes();
+        return $app["twig"]->render('frontOff/Commandes/showCommandes.html.twig',['data'=>$commandes]);
+    }
     public function show(Application $app) {
         $this->aquariumModel = new AquariumModel($app);
         $aquariums = $this->aquariumModel->getAllAquariums();
