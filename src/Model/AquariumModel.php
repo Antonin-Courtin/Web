@@ -45,7 +45,18 @@ class AquariumModel {
         ;
         return $queryBuilder->execute();
     }
+        public function getAllCommandes() {
 
+        $queryBuilder = new QueryBuilder($this->db);
+        $queryBuilder
+            ->select('p.date_achat', 't.libelle', 'p.prix', 'u.nom.','p.id')
+            ->from('commandes', 'p')
+            ->innerJoin('p', 'etats', 't', 'p.etat_id=t.id')
+            ->innerJoin('p', 'users','u','p.user_id=u.id')
+            ->addOrderBy('p.nom', 'ASC');
+        return $queryBuilder->execute()->fetchAll();
+    
+        }
     function getAquarium($id) {
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder
