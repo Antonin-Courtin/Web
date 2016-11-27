@@ -45,15 +45,25 @@ class AquariumModel {
         ;
         return $queryBuilder->execute();
     }
+    public function expedieCommande($id){
+        $queryBuilder = new QueryBuilder($this->db);
+        $queryBuilder
+            ->update('commandes')
+            ->set('etat_id','2')
+            ->where('id= ?')
+            ->setParameter(0,$id);
+        return $queryBuilder->execute();
+
+    }
         public function getAllCommandes() {
 
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder
-            ->select('p.date_achat', 't.libelle', 'p.prix', 'u.nom.','p.id')
+            ->select('p.date_achat', 'u.login', 'p.prix','p.id','t.libelle')
             ->from('commandes', 'p')
-            ->innerJoin('p', 'etats', 't', 'p.etat_id=t.id')
-            ->innerJoin('p', 'users','u','p.user_id=u.id')
-            ->addOrderBy('p.nom', 'ASC');
+            ->innerJoin('p','etats','t','p.etat_id=t.id')
+            ->innerJoin('p','users','u','p.user_id=u.id');
+
         return $queryBuilder->execute()->fetchAll();
     
         }
