@@ -13,7 +13,7 @@ class IndexController implements ControllerProviderInterface
             return $app->redirect($app["url_generator"]->generate('panier.index'));
         // remplacer par une redirection :  return $app->redirect($app["url_generator"]->generate("Panier.index"));
         if ($app['session']->get('droit') == 'DROITadmin')
-            return $app["twig"]->render("backOff/backOFFICE.html.twig");
+            return $app->redirect($app["url_generator"]->generate('aquarium.showCommandes'));
         // remplacer par une redirection
         
         return $app["twig"]->render("accueil.html.twig");

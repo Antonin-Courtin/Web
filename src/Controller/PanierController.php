@@ -51,25 +51,32 @@ class PanierController implements ControllerProviderInterface
 
     public function addPanier(Application $app, $id)
     {
-        if ($app['session']->get('droit') == "DROITclient" ) {
-            $this->panierModel = new PanierModel($app);
-            $this->aquariumModel = new AquariumModel($app);
-            if($this->panierModel->isInPanier($id,$app['session']->get('user_id'))!=NULL){
-                $this->panierModel->updatePanierUser($id,$app['session']->get('user_id'),$_POST['quantite']);
-            }else{
-                $aquarium = $this->aquariumModel->getAquarium($id);
-                $this->panierModel->addToPanier($aquarium, $app['session']->get('user_id'),$_POST['quantite']);
+        if(isset($_POST['quantite']) && is_numeric($_POST['quantite'])){
+            if ($app['session']->get('droit') == "DROITclient" ) {
+                $this->panierModel = new PanierModel($app);
+                $this->aquariumModel = new AquariumModel($app);
+                if($this->panierModel->isInPanier($id,$app['session']->get('user_id'))!=NULL){
+                    $this->panierModel->updatePanierUser($id,$app['session']->get('user_id'),$_POST['quantite']);
+                }else{
+                    $aquarium = $this->aquariumModel->getAquarium($id);
+                    $this->panierModel->addToPanier($aquarium, $app['session']->get('user_id'),$_POST['quantite']);
+
+                }
 
             }
+            if ($app['session']->get('droit') == "DROITclient") {
+                return $app->redirect($app["url_generator"]->generate("panier.show"));
 
-        }
-        if ($app['session']->get('droit') == "DROITclient") {
-            return $app->redirect($app["url_generator"]->generate("panier.show"));
 
+            }else{
+                return $app->redirect($app["url_generator"]->generate("aquarium.index"));
+            }
 
         }else{
-            return $app->redirect($app["url_generator"]->generate("aquarium.index"));
+            return $app->redirect($app["url_generator"]->generate("panier.show"));
+
         }
+
     }
 
     public function deleteArticlePanier(Application $app,$id){

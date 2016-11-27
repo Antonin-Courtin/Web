@@ -31,10 +31,10 @@ class AquariumController implements ControllerProviderInterface
         return $this->show($app);
     }
 
-    public function showCommande(Application $app){
+    public function showCommandes(Application $app){
         $this->aquariumModel=new AquariumModel($app);
         $commandes =$this->aquariumModel->getAllCommandes();
-        return $app["twig"]->render('frontOff/Commandes/showCommandes.html.twig',['data'=>$commandes]);
+        return $app["twig"]->render('backOff/backOFFICE.html.twig',['commandes'=>$commandes]);
     }
     public function show(Application $app) {
         $this->aquariumModel = new AquariumModel($app);
@@ -174,9 +174,19 @@ class AquariumController implements ControllerProviderInterface
             return $app->abort(404, 'error Pb id form edit');
 
     }
+    public function valideCommande($id,Application $app){
+        $this->aquariumModel=new aquariumModel($app);
+        $this->aquariumModel->expedieCommande($id);
+        return $app->redirect($app["url_generator"]->generate('aquarium.showCommandes'));
+
+
+    }
 
     public function connect(Application $app) {  //http://silex.sensiolabs.org/doc/providers.html#controller-providers
         $controllers = $app['controllers_factory'];
+
+
+        $controllers->get('/valideCommande/{id}','App\Controller\aquariumController::valideCommande')->bind('commande.valideCommande');
         $controllers->get('/showCommandes','App\Controller\aquariumController::showCommandes')->bind('aquarium.showCommandes');
         $controllers->get('/', 'App\Controller\aquariumController::index')->bind('aquarium.index');
         $controllers->get('/show', 'App\Controller\aquariumController::show')->bind('aquarium.show');
