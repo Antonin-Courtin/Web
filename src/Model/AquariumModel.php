@@ -23,7 +23,7 @@ class AquariumModel {
         $queryBuilder
             ->select('p.id', 't.libelle', 'p.nom', 'p.prix', 'p.photo')
             ->from('aquariums', 'p')
-            ->innerJoin('p', 'typeaquarium', 't', 'p.typeAquarium_id=t.id')
+            ->innerJoin('p', 'typeAquarium', 't', 'p.typeAquarium_id=t.id')
             ->addOrderBy('p.nom', 'ASC');
         return $queryBuilder->execute()->fetchAll();
 
