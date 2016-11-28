@@ -5,6 +5,7 @@ namespace App\Model;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Silex\Application;
 
+
 class PanierModel
 {
     private $db;
@@ -25,41 +26,17 @@ class PanierModel
         return $queryBuilder->execute()->fetchAll();
     }
 
-    public function valideCommande($prix,$id,$produit){
-        $requete="SHOW TABLE STATUS LIKE'commandes'";
-        $select = $this->db->query($requete);
-        $results = $select->fetchAll();
-        var_dump($results);
-        $queryBuilder = new QueryBuilder($this->db);
-        $queryBuilder
-            ->insert ('commandes')
-            ->values([
-                'id'=>'NULL',
-                'prix'=>'?',
+    public function valideCommande($prix,$id){
+        $conn=$this->db;
+        $conn->beginTransaction();
+        $requestSQL=$conn->prepare('insert into commandes(user_id,prix,etat_id) values (?,?,?)');
+        $requestSQL->execute([$id,$prix,'1']);
+        $lastinsertid=$conn->lastInsertId();
+        $requestSQL=$conn->prepare('update paniers set commande_id=? where user_id=?');
+        $requestSQL->execute([$lastinsertid,$id]);
+        $conn->commit();
 
-                'date_achat'=>'NULL',
-                'user_id'=> '?',
-                'etat_id'=> '1'
-
-            ])
-            ->setParameter(0, $prix)
-            ->setParameter(1, $id)
-        ;
-
-        $queryBuilder->execute();
-        foreach($produit as $r){
-        $queryBuilder = new QueryBuilder($this->db);
-        $queryBuilder
-            ->update('paniers','p')
-            ->set('p.commande_id','?')
-            ->where('p.user_id=?')
-            ->andWhere('p.aquarium_id=?')
-            ->setParameter(0,$results[0]['Auto_increment'])
-            ->setParameter(1,$id)
-            ->setParameter(2,$r['aquarium_id']);
-        $queryBuilder->execute();
-    }
-    return null;
+        return null;
     }
 
     public function updatePanierUser($id,$id_user,$quantite){
