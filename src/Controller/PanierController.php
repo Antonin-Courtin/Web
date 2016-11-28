@@ -44,8 +44,7 @@ class PanierController implements ControllerProviderInterface
     public function validerCommande(Application $app){
         if(isset($_POST['total'])){
             $this->panierModel=new PanierModel($app);
-            $produit=$this->panierModel->getPanierUser($app['session']->get('user_id'));
-            $this->panierModel->valideCommande($_POST['total'],$app['session']->get('user_id'),$produit);
+            $this->panierModel->valideCommande($_POST['total'],$app['session']->get('user_id'));
             return $app->redirect($app["url_generator"]->generate("panier.show"));
         }
 
