@@ -29,7 +29,7 @@
                 </label>
             <label>Login
                 <input name="login"  type="text"  size="18" value="{{donnees.login}}"/>
-                {% if erreurs.password is defined %}
+                {% if erreurs.login is defined %}
                     <small class="error">{{erreurs.login}}</small>
                 {% endif %}
             </label>
