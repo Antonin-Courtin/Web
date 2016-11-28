@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\UserModel;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;   // modif version 2.0
 
@@ -19,6 +20,7 @@ class PanierController implements ControllerProviderInterface
 
     private $panierModel;
     private $aquariumModel;
+    private $UserModel;
     public function index(Application $app) {
         return $this->show($app);
     }
@@ -48,7 +50,14 @@ class PanierController implements ControllerProviderInterface
         }
 
     }
+    public function showCommandesUser(Application $app){
+        if($app['session']->get('droit') == "DROITclient"){
+            $this->UserModel=new UserModel($app);
+            $commandes=$this->UserModel->getCommandesUser($app['session']->get('user_id'));
+            return $app["twig"]->render('frontOff\Divers\commandesShow.html.twig',['data'=>$commandes]);
+        }
 
+    }
     public function addPanier(Application $app, $id)
     {
         if(isset($_POST['quantite']) && is_numeric($_POST['quantite'])){
@@ -98,7 +107,7 @@ class PanierController implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controllers = $app['controllers_factory'];
-
+        $controllers->get('/showCommandes', 'App\Controller\PanierController::showCommandesUser')->bind('panier.showCommandes');
         $controllers->get('/', 'App\Controller\PanierController::index')->bind('panier.index');
         $controllers->get('/show', 'App\Controller\PanierController::show')->bind('panier.show');
         $controllers->post('/add/{id}', 'App\Controller\PanierController::addPanier')->bind('panier.add');
