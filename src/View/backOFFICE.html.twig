@@ -1,0 +1,29 @@
+{% extends "layout.html.twig" %}
+
+
+
+
+
+	{% block contenu %}
+
+		<div class="row">
+			<div class="small-7 large-7 columns">
+				<table class="table table-responsive table-bordered table-striped">
+					<caption>Commandes à valider</caption>
+					<thead>
+					<tr><th>id commande</th><th>Utilisateur<th>prix total</th><th>date de l'achat</th><th>Etat</th><th>Action</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for commande in commandes if commandes is not empty %}
+					<tr>
+						<td>{{commande.id}}</td><td>{{commande.login}}</td><td>{{commande.prix}}</td><td>{{ commande.date_achat }}</td><td>{{ commande.libelle }}</td><td><a href="{{ path('commande.valideCommande', {id: commande.id}) }}">Expedier</a></td>
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	{% endblock %}
+
