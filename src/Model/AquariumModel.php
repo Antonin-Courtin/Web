@@ -28,7 +28,19 @@ class AquariumModel {
         return $queryBuilder->execute()->fetchAll();
 
     }
+    public function getDetailsCommande($id){
+        $queryBuilder = new QueryBuilder($this->db);
+        $queryBuilder
+            ->select('p.aquarium_id', 'a.nom','p.dateAjoutPanier', 'p.prix', 'p.quantite', 'u.login', 'u.adresse')
+            ->from('paniers', 'p')
+            ->innerJoin('p', 'users', 'u', 'p.user_id=u.id')
+            ->innerJoin('p', 'commandes', 'c', 'p.commande_id=c.id')
+            ->innerJoin('p', 'aquariums', 'a', 'p.aquarium_id=a.id')
+            ->where('p.commande_id=?')
+            ->setParameter(0, $id);
+        return $queryBuilder->execute()->fetchAll();
 
+    }
     public function insertAquarium($donnees) {
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder->insert('aquariums')
