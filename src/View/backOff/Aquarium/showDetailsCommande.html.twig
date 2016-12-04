@@ -1,0 +1,24 @@
+{% extends "layout.html.twig" %}
+
+	{% block contenu %}
+
+        <div class="row">
+            <div class="small-7 large-7 columns">
+                <table class="table table-responsive table-bordered table-striped">
+                    <caption>Détails de la commande</caption>
+                    <thead>
+                    <tr><th>Id aquarium</th><th>date Achat</th><th>nom</th><th>prix</th><th>quantite</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for commande in donnees if donnees is not empty %}
+                        <tr>
+                            <td>{{commande.aquarium_id}}</td><td>{{ commande.dateAjoutPanier }}</td><td>{{commande.nom}}</td><td>{{ commande.prix }}</td><td>{{ commande.quantite }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    {% endblock %}
