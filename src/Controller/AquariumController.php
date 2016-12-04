@@ -182,10 +182,18 @@ class AquariumController implements ControllerProviderInterface
 
     }
 
+    public function afficheDetailsCommande($id,Application $app){
+        $this->aquariumModel=new aquariumModel($app);
+        $donnees=$this->aquariumModel->getDetailsCommande($id);
+        return $app["twig"]->render('backOff/Aquarium/showDetailsCommande.html.twig',['donnees'=>$donnees]);
+
+
+    }
+
     public function connect(Application $app) {  //http://silex.sensiolabs.org/doc/providers.html#controller-providers
         $controllers = $app['controllers_factory'];
 
-
+        $controllers->get('/afficheDetailsCommande/{id}','App\Controller\aquariumController::afficheDetailsCommande')->bind('commande.afficheDetailsCommande');
         $controllers->get('/valideCommande/{id}','App\Controller\aquariumController::valideCommande')->bind('commande.valideCommande');
         $controllers->get('/showCommandes','App\Controller\aquariumController::showCommandes')->bind('aquarium.showCommandes');
         $controllers->get('/', 'App\Controller\aquariumController::index')->bind('aquarium.index');
