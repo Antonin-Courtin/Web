@@ -26,14 +26,18 @@ class PanierModel
         return $queryBuilder->execute()->fetchAll();
     }
 
-    public function valideCommande($prix,$id){
+    public function valideCommande($prix,$id,$panier){
         $conn=$this->db;
         $conn->beginTransaction();
         $requestSQL=$conn->prepare('insert into commandes(user_id,prix,etat_id) values (?,?,?)');
         $requestSQL->execute([$id,$prix,'1']);
         $lastinsertid=$conn->lastInsertId();
-        $requestSQL=$conn->prepare('update paniers set commande_id=? where user_id=?');
-        $requestSQL->execute([$lastinsertid,$id]);
+
+        foreach($panier as $pani){
+            $requestSQL=$conn->prepare('update paniers set commande_id=? where id=?');
+            $requestSQL->execute([$lastinsertid,$pani['id']]);
+        }
+
         $conn->commit();
 
         return null;
