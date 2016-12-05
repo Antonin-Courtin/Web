@@ -33,7 +33,7 @@ class PanierController implements ControllerProviderInterface
             $aquarium=$this->aquariumModel->getAllAquariums();
             $total=0;
             foreach ($panier as $p){
-                $total=$p['prix']+$total;
+                $total=$p['prix']*$p['quantite']+$total;
             }
             return $app["twig"]->render('frontOff\frontOFFICE.html.twig',['data'=>$aquarium,'panier'=>$panier,'total'=>$total]);
 
