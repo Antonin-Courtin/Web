@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;   // pour utiliser request
 
 use App\Model\AquariumModel;
 use App\Model\TypeAquariumModel;
+use App\Model\CommandesModel;
 
 use Symfony\Component\Validator\Constraints as Assert;   // pour utiliser la validation
 use Symfony\Component\Validator\Constraint;
@@ -18,6 +19,7 @@ class AquariumController implements ControllerProviderInterface
 {
     private $aquariumModel;
     private $typeAquariumModel;
+    private $CommandesModel;
 
 
     public function initModel(Application $app){  //  ne fonctionne pas dans le const
@@ -32,8 +34,8 @@ class AquariumController implements ControllerProviderInterface
     }
 
     public function showCommandes(Application $app){
-        $this->aquariumModel=new AquariumModel($app);
-        $commandes =$this->aquariumModel->getAllCommandes();
+        $this->CommandesModel=new CommandesModel($app);
+        $commandes =$this->CommandesModel->getAllCommandes();
         return $app["twig"]->render('backOff/backOFFICE.html.twig',['commandes'=>$commandes]);
     }
     public function show(Application $app) {
@@ -175,16 +177,16 @@ class AquariumController implements ControllerProviderInterface
 
     }
     public function valideCommande($id,Application $app){
-        $this->aquariumModel=new aquariumModel($app);
-        $this->aquariumModel->expedieCommande($id);
+        $this->CommandesModel=new CommandesModel($app);
+        $this->CommandesModel->expedieCommande($id);
         return $app->redirect($app["url_generator"]->generate('aquarium.showCommandes'));
 
 
     }
 
     public function afficheDetailsCommande($id,Application $app){
-        $this->aquariumModel=new aquariumModel($app);
-        $donnees=$this->aquariumModel->getDetailsCommande($id);
+        $this->CommandesModel=new CommandesModel($app);
+        $donnees=$this->CommandesModel->getDetailsCommande($id);
         return $app["twig"]->render('backOff/Aquarium/showDetailsCommande.html.twig',['donnees'=>$donnees]);
 
 

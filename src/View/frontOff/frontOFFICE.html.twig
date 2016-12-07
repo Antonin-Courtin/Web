@@ -38,7 +38,7 @@
 				{% for pani in panier if panier is not empty %}
 
 					<tr>
-						<td>{{pani.aquarium_id}}</td><td>{{pani.prix}}</td><td>{{ pani.quantite }}</td><td><a href="{{ path('panier.deleteArticle', {id: pani.id}) }}">Supprimer</a></td>
+						<td>{{pani.aquarium_id}}</td><td>{{pani.prix * pani.quantite}}</td><td>{{ pani.quantite }}</td><td><a href="{{ path('panier.deleteArticle', {id: pani.id}) }}">Supprimer</a></td>
 					</tr>
 
 				{% endfor %}

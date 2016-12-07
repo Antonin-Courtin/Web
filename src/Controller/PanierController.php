@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;   // pour utiliser request
 use App\Model\PanierModel;
 use App\Model\AquariumModel;
 use App\Model\TypeAquariumModel;
+use App\Model\CommandesModel;
 
 use Symfony\Component\Validator\Constraints as Assert;   // pour utiliser la validation
 use Symfony\Component\Validator\Constraint;
@@ -21,6 +22,7 @@ class PanierController implements ControllerProviderInterface
     private $panierModel;
     private $aquariumModel;
     private $UserModel;
+    private $CommandesModel;
     public function index(Application $app) {
         return $this->show($app);
     }
@@ -44,11 +46,11 @@ class PanierController implements ControllerProviderInterface
     public function validerCommande(Application $app){
         if(isset($_POST['total'])){
             $this->panierModel=new PanierModel($app);
-            $this->panierModel = new PanierModel($app);
+            $this->CommandesModel = new CommandesModel($app);
             $panier = $this->panierModel->getPanierUser($app['session']->get('user_id'));
             var_dump($panier);
             if($panier !=NULL){
-                $this->panierModel->valideCommande($_POST['total'], $app['session']->get('user_id'), $panier);
+                $this->CommandesModel->valideCommande($_POST['total'], $app['session']->get('user_id'), $panier);
             }
 
 
@@ -58,8 +60,8 @@ class PanierController implements ControllerProviderInterface
     }
     public function showCommandesUser(Application $app){
         if($app['session']->get('droit') == "DROITclient"){
-            $this->UserModel=new UserModel($app);
-            $commandes=$this->UserModel->getCommandesUser($app['session']->get('user_id'));
+            $this->CommandesModel=new CommandesModel($app);
+            $commandes=$this->CommandesModel->getCommandesUser($app['session']->get('user_id'));
             return $app["twig"]->render('frontOff\Divers\commandesShow.html.twig',['data'=>$commandes]);
         }
 

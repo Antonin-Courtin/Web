@@ -20,19 +20,7 @@ class UserModel {
 		else
 			return false;
 	}
-    public function getCommandesUser($idUser){
-        $queryBuilder = new QueryBuilder($this->db);
-        $queryBuilder
-            ->select('*')
-            ->from('commandes')
-            ->where('user_id = ?')
-            ->innerJoin('commandes','etats', 't','etat_id=t.id')
-            ->setParameter(0, $idUser)
-            ->addOrderBy('t.libelle', 'DESC');;
 
-        return $queryBuilder->execute()->fetchAll();
-
-}
 
     public function updateUser($donnees){
         $queryBuilder = new QueryBuilder($this->db);

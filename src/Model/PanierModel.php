@@ -17,7 +17,7 @@ class PanierModel
     public function getPanierUser($id){
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder
-            ->select('SUM(p.quantite) as quantite', 'p.prix*SUM(p.quantite) as prix','p.aquarium_id','p.dateAjoutPanier','p.id')
+            ->select('SUM(p.quantite) as quantite', 'p.prix','p.aquarium_id','p.dateAjoutPanier','p.id')
             ->from('paniers', 'p')
             ->where('p.user_id=?')
             ->andWhere('p.commande_id is NULL')
@@ -26,22 +26,6 @@ class PanierModel
         return $queryBuilder->execute()->fetchAll();
     }
 
-    public function valideCommande($prix,$id,$panier){
-        $conn=$this->db;
-        $conn->beginTransaction();
-        $requestSQL=$conn->prepare('insert into commandes(user_id,prix,etat_id) values (?,?,?)');
-        $requestSQL->execute([$id,$prix,'1']);
-        $lastinsertid=$conn->lastInsertId();
-
-        foreach($panier as $pani){
-            $requestSQL=$conn->prepare('update paniers set commande_id=? where id=?');
-            $requestSQL->execute([$lastinsertid,$pani['id']]);
-        }
-
-        $conn->commit();
-
-        return null;
-    }
 
     public function updatePanierUser($id,$id_user,$quantite){
         $queryBuilder = new QueryBuilder($this->db);

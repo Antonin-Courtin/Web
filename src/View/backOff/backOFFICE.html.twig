@@ -11,13 +11,14 @@
 				<table class="table table-responsive table-bordered table-striped">
 					<caption>Commandes à valider</caption>
 					<thead>
-					<tr><th>id commande</th><th>Utilisateur<th>prix total</th><th>date de l'achat</th><th>Etat</th><th>Action</th>
+					<tr><th>id commande</th><th>Utilisateur<th>prix total</th><th>date de l'achat</th><th>Etat</th><th>Action</th><th>Détails commande</th>
 					</tr>
 					</thead>
 					<tbody>
 					{% for commande in commandes if commandes is not empty %}
 					<tr>
-						<td>{{commande.id}}</td><td>{{commande.login}}</td><td>{{commande.prix}}</td><td>{{ commande.date_achat }}</td><td>{{ commande.libelle }}</td><td><a href="{{ path('commande.valideCommande', {id: commande.id}) }}">Expedier</a></td>
+						<td>{{commande.id}}</td><td>{{commande.login}}</td><td>{{commande.prix}}</td><td>{{ commande.date_achat }}</td><td>{{ commande.libelle }}</td><td><a href="{{ path('commande.valideCommande', {id: commande.id}) }}">Expedier</a></td><td><a href="{{ path('commande.afficheDetailsCommande', {id: commande.id}) }}">Afficher</a></td>
+					</tr>
 					</tr>
 					{% endfor %}
 					</tbody>

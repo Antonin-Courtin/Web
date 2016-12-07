@@ -13,11 +13,12 @@
                     <tbody>
                     {% for commande in donnees if donnees is not empty %}
                         <tr>
-                            <td>{{commande.aquarium_id}}</td><td>{{ commande.dateAjoutPanier }}</td><td>{{commande.nom}}</td><td>{{ commande.prix }}</td><td>{{ commande.quantite }}</td>
+                            <td>{{commande.aquarium_id}}</td><td>{{ commande.dateAjoutPanier }}</td><td>{{commande.nom}}</td><td>{{ commande.prix*commande.quantite }}</td><td>{{ commande.quantite }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+                <a href="{{ path('commande.valideCommande', {id: donnees[0].commande_id}) }}">Expedier</a>
             </div>
         </div>
 
