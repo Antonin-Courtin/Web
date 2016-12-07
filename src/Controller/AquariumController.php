@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;   // pour utiliser request
 use App\Model\AquariumModel;
 use App\Model\TypeAquariumModel;
 use App\Model\CommandesModel;
+use App\Model\PanierModel;
+
+
 
 use Symfony\Component\Validator\Constraints as Assert;   // pour utiliser la validation
 use Symfony\Component\Validator\Constraint;
@@ -20,6 +23,9 @@ class AquariumController implements ControllerProviderInterface
     private $aquariumModel;
     private $typeAquariumModel;
     private $CommandesModel;
+    private $panierModel;
+    private $UserModel;
+
 
 
     public function initModel(Application $app){  //  ne fonctionne pas dans le const
@@ -191,10 +197,30 @@ class AquariumController implements ControllerProviderInterface
 
 
     }
+    public function rechercher(Application $app){
+        $this->aquariumModel=new AquariumModel($app);
+        $aquariums=$this->aquariumModel->getAquariumsWithType($_POST['typeAquarium_id']);
+
+
+        $this->panierModel = new PanierModel($app);
+        $panier = $this->panierModel->getPanierUser($app['session']->get('user_id'));
+        $this->typeAquariumModel=new TypeAquariumModel($app);
+        $type=$this->typeAquariumModel->getAllTypeAquariums();
+        $total=0;
+        foreach ($panier as $p){
+            $total=$p['prix']*$p['quantite']+$total;
+        }
+
+        return $app["twig"]->render('frontOff\frontOFFICE.html.twig',['data'=>$aquariums,'panier'=>$panier,'total'=>$total,'donnees'=>$type]);
+
+
+
+    }
 
     public function connect(Application $app) {  //http://silex.sensiolabs.org/doc/providers.html#controller-providers
         $controllers = $app['controllers_factory'];
 
+        $controllers->post('/showRecherche', 'App\Controller\aquariumController::rechercher')->bind('aquarium.rechercher');
         $controllers->get('/afficheDetailsCommande/{id}','App\Controller\aquariumController::afficheDetailsCommande')->bind('commande.afficheDetailsCommande');
         $controllers->get('/valideCommande/{id}','App\Controller\aquariumController::valideCommande')->bind('commande.valideCommande');
         $controllers->get('/showCommandes','App\Controller\aquariumController::showCommandes')->bind('aquarium.showCommandes');

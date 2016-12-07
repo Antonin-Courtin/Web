@@ -13,7 +13,7 @@
             <label>Type :
                 <select name="typeProduit_id">
                     {% if  donnees.typeProduit_id is not defined or donnees.typeProduit_id is empty   %}
-                        <option value="">Veuillez sélectionner un produit</option>
+                        <option value="">Veuillez sélectionner type</option>
                     {% endif %}
                     {% for typeProduit in typeProduits %}
                         <option value="{{ typeProduit.id }}"

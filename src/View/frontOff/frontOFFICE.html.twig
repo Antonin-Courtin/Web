@@ -6,6 +6,22 @@
 
 	<div class="row">
 		<div class="small-7 large-7 columns">
+			<form method="post" action="{{ path('aquarium.rechercher') }}">
+				<select name="typeAquarium_id">
+            	{% if  donnees.typeProduit_id is not defined or donnees.typeProduit_id is empty   %}
+					<option value="">Rechercher par type</option>
+            	{% endif %}
+            	{% for typeProduit in donnees %}
+					<option value="{{ typeProduit.id }}"
+                       	 {% if donnees.typeProduit_id is defined and typeProduit.id == donnees.typeProduit_id %}selected{% endif %}>
+                    	{{ typeProduit.libelle }}
+					</option>
+            	{% endfor %}
+				<input type="submit" name="rechercher produit" value="Rechercher" />
+				</select>
+			</form>
+
+
 			<table class="table table-responsive table-bordered table-striped">
 				<caption>Aquariums Disponibles</caption>
 				<thead>

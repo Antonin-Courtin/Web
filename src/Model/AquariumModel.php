@@ -57,6 +57,22 @@ class AquariumModel {
         return $queryBuilder->execute()->fetch();
     }
 
+    public function getAquariumsWithType($idType){
+
+            $queryBuilder = new QueryBuilder($this->db);
+            $queryBuilder
+                ->select('p.id', 't.libelle', 'p.nom', 'p.prix', 'p.photo')
+                ->from('aquariums', 'p')
+                ->innerJoin('p', 'typeAquarium', 't', 'p.typeAquarium_id=t.id')
+                ->where("p.typeaquarium_id=?")
+                ->addOrderBy('p.nom', 'ASC')
+                ->setParameter(0, $idType);
+            return $queryBuilder->execute()->fetchAll();
+
+
+
+    }
+
     public function updateAquarium($donnees) {
         $queryBuilder = new QueryBuilder($this->db);
         $queryBuilder

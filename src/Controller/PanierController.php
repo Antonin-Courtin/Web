@@ -23,24 +23,27 @@ class PanierController implements ControllerProviderInterface
     private $aquariumModel;
     private $UserModel;
     private $CommandesModel;
+    private $TypeAquariumModel;
     public function index(Application $app) {
         return $this->show($app);
     }
 
     public function show(Application $app){
-        if( $app['session']->get('droit')=="DROITclient"){
+
             $this->panierModel = new PanierModel($app);
             $panier = $this->panierModel->getPanierUser($app['session']->get('user_id'));
             $this->aquariumModel=new AquariumModel($app);
             $aquarium=$this->aquariumModel->getAllAquariums();
+            $this->TypeAquariumModel=new TypeAquariumModel($app);
+            $type=$this->TypeAquariumModel->getAllTypeAquariums();
             $total=0;
             foreach ($panier as $p){
                 $total=$p['prix']*$p['quantite']+$total;
             }
-            return $app["twig"]->render('frontOff\frontOFFICE.html.twig',['data'=>$aquarium,'panier'=>$panier,'total'=>$total]);
+            return $app["twig"]->render('frontOff\frontOFFICE.html.twig',['data'=>$aquarium,'panier'=>$panier,'total'=>$total,'donnees'=>$type]);
 
 
-        }
+
     }
 
     public function validerCommande(Application $app){
